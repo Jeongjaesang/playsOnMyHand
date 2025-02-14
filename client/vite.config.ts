@@ -12,5 +12,6 @@ const vitestConfig = {
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  base: "./", // Netlify에서 상대 경로 사용
   ...vitestConfig,
 });
