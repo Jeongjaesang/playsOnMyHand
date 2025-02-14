@@ -1,0 +1,19 @@
+{
+  "files": [],
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023", "DOM"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": true,
+    "types": ["vitest/globals"], // ✅ Vitest 글로벌 타입을 강제 로드
+    "noEmit": true,
+    "jsx": "react-jsx"
+  },
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}
