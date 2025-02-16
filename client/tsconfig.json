@@ -10,7 +10,11 @@
     "strict": true,
     "types": ["vitest/globals"], // ✅ Vitest 글로벌 타입을 강제 로드
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "references": [
     { "path": "./tsconfig.app.json" },

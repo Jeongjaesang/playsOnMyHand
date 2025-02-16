@@ -1,0 +1,26 @@
+{
+  "name": "playsonmyhand",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install",
+    "lint:client": "cd client && npm run lint",
+    "lint:server": "cd server && npm run lint",
+    "lint": "npm run lint:client"
+  },
+  "author": "",
+  "license": "ISC",
+  "lint-staged": {
+    "client/**/*.{js,jsx,ts,tsx}": [
+      "cd client && npm run lint"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.7.1",
+    "@commitlint/config-conventional": "^19.7.1",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.4.3"
+  }
+}
