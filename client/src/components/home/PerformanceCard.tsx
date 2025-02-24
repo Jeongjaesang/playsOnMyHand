@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Heart } from "lucide-react";
 import { Button } from "@/components/shadcn/button";
 
@@ -7,6 +8,7 @@ interface Performance {
   venue: string;
   date: string;
   category: string;
+  liked: boolean;
 }
 
 interface PerformanceCardProps {
@@ -15,7 +17,10 @@ interface PerformanceCardProps {
 
 export function PerformanceCard({ performance }: PerformanceCardProps) {
   return (
-    <div className="overflow-hidden transition-shadow duration-300 bg-white border border-gray-200 rounded-lg hover:shadow-md">
+    <Link
+      to={`/performance/${performance.id}`}
+      className="block overflow-hidden transition-shadow duration-300 bg-white border border-gray-200 rounded-lg hover:shadow-md"
+    >
       <div className="h-48 bg-gray-100"></div>
       <div className="p-4">
         <h2 className="mb-2 text-xl font-semibold text-gray-900">
@@ -36,6 +41,6 @@ export function PerformanceCard({ performance }: PerformanceCardProps) {
           </Button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -14,6 +14,7 @@ export default function Home() {
       venue: "Seoul Arts Center",
       date: "2025-02-15",
       category: "Theater",
+      liked: false,
     },
     {
       id: 2,
@@ -21,6 +22,7 @@ export default function Home() {
       venue: "National Theater of Korea",
       date: "2025-02-20",
       category: "Ballet",
+      liked: false,
     },
     {
       id: 3,
@@ -28,6 +30,7 @@ export default function Home() {
       venue: "Blue Square",
       date: "2025-02-25",
       category: "Musical",
+      liked: true,
     },
   ]);
 

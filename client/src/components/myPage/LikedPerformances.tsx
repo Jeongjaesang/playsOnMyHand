@@ -1,8 +1,14 @@
 import { useState } from "react";
-import { Calendar, Clock, Trash2, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  Calendar,
+  Trash2,
+  ChevronDown,
+  ChevronUp,
+  MapPin,
+  ExternalLink,
+} from "lucide-react";
 import { Button } from "@/components/shadcn/button";
 import { Badge } from "@/components/shadcn/badge";
-import { Alert, AlertDescription, AlertTitle } from "@/components/shadcn/alert";
 import {
   Select,
   SelectContent,
@@ -15,17 +21,23 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
   CardFooter,
 } from "@/components/shadcn/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../shadcn/tooltip";
+import LikedPerformanceItem from "./LikedPerformanceItem";
 
 interface Performance {
   id: number;
   title: string;
-  venue: string;
   date: string;
-  category: string;
-  isUrgent: boolean;
+  venue: string;
+  type: string;
+  ticketDeadline: string;
 }
 
 interface LikedPerformancesProps {
@@ -33,10 +45,20 @@ interface LikedPerformancesProps {
   onRemove: (id: number) => void;
 }
 
+const isDateApproaching = (date: string, days = 7) => {
+  const now = new Date();
+  const targetDate = new Date(date);
+  const timeDiff = targetDate.getTime() - now.getTime();
+  const dayDiff = timeDiff / (1000 * 3600 * 24);
+  return dayDiff <= days && dayDiff > 0;
+};
+
 export function LikedPerformances({
   performances,
   onRemove,
 }: LikedPerformancesProps) {
+  // performances 정보를 해당 컴포넌트에서 가져오는게 더 나으려나?
+
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortedPerformances, setSortedPerformances] = useState(performances);
 
@@ -80,44 +102,13 @@ export function LikedPerformances({
           {sortOrder === "asc" ? "오름차순" : "내림차순"}
         </Button>
       </div>
-      <div className="space-y-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {sortedPerformances.map((performance) => (
-          <Card key={performance.id} className="p-3 sm:p-6">
-            <CardHeader className="p-0 sm:p-6">
-              <CardTitle className="text-lg sm:text-xl">
-                {performance.title}
-              </CardTitle>
-              <CardDescription className="text-sm">
-                {performance.venue}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-0 pt-4 sm:p-6">
-              <div className="flex items-center space-x-2 text-sm text-gray-500">
-                <Calendar className="w-4 h-4" />
-                <span>{performance.date}</span>
-              </div>
-              <Badge className="mt-2">{performance.category}</Badge>
-              {performance.isUrgent && (
-                <Alert className="mt-2">
-                  <Clock className="w-4 h-4" />
-                  <AlertTitle>예매 임박</AlertTitle>
-                  <AlertDescription>
-                    이 공연의 예매 기간이 곧 마감됩니다.
-                  </AlertDescription>
-                </Alert>
-              )}
-            </CardContent>
-            <CardFooter className="p-0 pt-4 sm:p-6">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => onRemove(performance.id)}
-              >
-                <Trash2 className="w-4 h-4 mr-2" />
-                삭제
-              </Button>
-            </CardFooter>
-          </Card>
+          <LikedPerformanceItem
+            key={performance.id}
+            performance={performance}
+            onRemove={onRemove}
+          />
         ))}
       </div>
     </>

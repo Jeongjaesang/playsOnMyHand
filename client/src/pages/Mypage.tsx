@@ -4,49 +4,77 @@ import { TabLayout } from "@/components/common/TabLayout";
 import { LikedPerformances } from "@/components/myPage/LikedPerformances";
 import { UserComments } from "@/components/myPage/UserComments";
 
-// 임시 데이터
-const likedPerformances = [
-  {
-    id: 1,
-    title: "Hamlet",
-    venue: "Seoul Arts Center",
-    date: "2025-02-15",
-    category: "Theater",
-    isUrgent: true,
-  },
-  {
-    id: 2,
-    title: "Swan Lake",
-    venue: "National Theater of Korea",
-    date: "2025-02-20",
-    category: "Ballet",
-    isUrgent: false,
-  },
-  {
-    id: 3,
-    title: "The Phantom of the Opera",
-    venue: "Blue Square",
-    date: "2025-02-25",
-    category: "Musical",
-    isUrgent: false,
-  },
-];
+// 현재 날짜를 기준으로 더미 데이터 생성 함수
+const generateDummyData = () => {
+  const today = new Date();
+  const addDays = (date: Date, days: number) => {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result.toISOString().split("T")[0];
+  };
+
+  return [
+    {
+      id: 1,
+      title: "Hamlet",
+      date: addDays(today, 30),
+      venue: "Seoul Arts Center",
+      type: "Theater",
+      ticketDeadline: addDays(today, 25),
+    },
+    {
+      id: 2,
+      title: "Swan Lake",
+      date: addDays(today, 5),
+      venue: "National Theater of Korea",
+      type: "Ballet",
+      ticketDeadline: addDays(today, 2),
+    },
+    {
+      id: 3,
+      title: "The Phantom of the Opera",
+      date: addDays(today, 15),
+      venue: "Blue Square",
+      type: "Musical",
+      ticketDeadline: addDays(today, 10),
+    },
+    {
+      id: 4,
+      title: "Les Misérables",
+      date: addDays(today, 3),
+      venue: "Charlotte Theater",
+      type: "Musical",
+      ticketDeadline: addDays(today, 1),
+    },
+    {
+      id: 5,
+      title: "Madama Butterfly",
+      date: addDays(today, 45),
+      venue: "Seoul Opera House",
+      type: "Opera",
+      ticketDeadline: addDays(today, 40),
+    },
+  ];
+};
 
 const userComments = [
   {
     id: 1,
+    performanceId: "1",
     performanceTitle: "Hamlet",
     comment: "An amazing performance! The lead actor was phenomenal.",
     date: "2025-01-15",
   },
   {
     id: 2,
+    performanceId: "2",
     performanceTitle: "Swan Lake",
     comment: "The choreography was breathtaking. A must-see for ballet lovers.",
     date: "2025-01-20",
   },
   {
     id: 3,
+    performanceId: "3",
     performanceTitle: "The Phantom of the Opera",
     comment: "The music and set design were incredible. Highly recommended!",
     date: "2025-01-25",
@@ -57,8 +85,9 @@ export default function MyPage() {
   // 상탯값 - 현재 선택된 탭으로 추가하기
   // const [selectedTab, setSelectedTab] = useState("liked");
 
-  const [likedPerformancesList, setLikedPerformancesList] =
-    useState(likedPerformances);
+  const [likedPerformancesList, setLikedPerformancesList] = useState(
+    generateDummyData()
+  );
   const [commentsList, setCommentsList] = useState(userComments);
 
   const handleRemoveLiked = (id: number) => {
