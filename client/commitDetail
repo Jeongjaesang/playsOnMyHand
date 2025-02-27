@@ -1,8 +1,24 @@
 # 이번 커밋 작업 사항
 
-- 댓글 목록 컴포넌트 수정
-- 마이 페이지 아이템 컴포넌트 분리
-- 마이 페이지 아이템 컴포넌트 디자인 수정
+- 알림 페이지 알림설정 추가
+- 모달 관련 로직 구현
+- shad cn sonner toast 구현
+- Filter 을 form 으로 하기
+- HomePage 통신 로직 짜기
+
+
+* 쟁점
+
+accessToken을 react Query로 관리 vs zustand로 관리. 
+
+zustand로 accessToken을 관리해야 하는 이유 
+- 알림 기능은 로그인 상태에서만 사용할 수 있음. 
+- 알림 기능은 webSocket으로 구현 
+- zustand로 accessToken을 관리하면 구현상 이점이 있음.
+
+
+
+
 
 
 # 앞으로 해야할 것 

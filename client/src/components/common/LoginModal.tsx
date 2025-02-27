@@ -11,20 +11,17 @@ import { Button } from "@/components/shadcn/button";
 import { FaGoogle } from "react-icons/fa";
 import { SiNaver } from "react-icons/si";
 import { RiKakaoTalkFill } from "react-icons/ri";
+import { useModalStore } from "@/store/modal";
 
-interface LoginModalProps {
-  isOpen?: boolean;
-  onClose: () => void;
-  onSocialLogin: (provider: string) => void;
-}
+const onSocialLogin = (provider: string) => {
+  console.log(provider); // 임시로 설정
+};
 
-export function LoginModal({
-  isOpen,
-  onClose,
-  onSocialLogin,
-}: LoginModalProps) {
+export function LoginModal() {
+  const { isLoginModalOpen, closeLoginModal } = useModalStore();
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isLoginModalOpen} onOpenChange={closeLoginModal}>
       <DialogOverlay>
         <DialogContent className="sm:max-w-[425px] [&_.fixed.bg-black]:bg-black/25 ">
           <DialogHeader>

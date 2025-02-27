@@ -11,9 +11,10 @@ import {
   PopoverTrigger,
 } from "@/components/shadcn/popover";
 
-export function DatePickerWithRange({
-  className,
-}: React.HTMLAttributes<HTMLDivElement>) {
+interface DatePickerWithRangeProps
+  extends React.HTMLAttributes<HTMLDivElement> {}
+
+export function DatePickerWithRange({ className }: DatePickerWithRangeProps) {
   const [date, setDate] = React.useState<DateRange | undefined>();
 
   return (
@@ -22,7 +23,7 @@ export function DatePickerWithRange({
         <PopoverTrigger asChild>
           <Button
             id="date"
-            variant={"outline"}
+            variant="outline"
             className={cn(
               "w-full justify-start text-left font-normal",
               !date && "text-muted-foreground"
@@ -53,6 +54,18 @@ export function DatePickerWithRange({
           />
         </PopoverContent>
       </Popover>
+
+      {/* ✅ Hidden Inputs to Submit Date Range */}
+      <input
+        type="hidden"
+        name={`startDate`}
+        value={date?.from?.toISOString() || ""}
+      />
+      <input
+        type="hidden"
+        name={`endDate`}
+        value={date?.to?.toISOString() || ""}
+      />
     </div>
   );
 }

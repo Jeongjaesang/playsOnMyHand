@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import { Bell, User } from "lucide-react";
 import { Button } from "@/components/shadcn/button";
-import { useState } from "react";
+import { useAuthStore } from "@/store/auth";
+import { useModalStore } from "@/store/modal";
+import { logout } from "@/services/authService";
 
 function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-
-  // 추후에 전역 값으로 받아오게끔 컴포넌트 수정 필요
+  const { accessToken: isLoggedin } = useAuthStore();
+  const { openLoginModal } = useModalStore();
 
   return (
     <header className="p-4 bg-white border-b border-gray-200">
@@ -26,20 +26,12 @@ function Header() {
               <User className="w-5 h-5" />
             </Link>
           </Button>
-          {isLoggedIn ? (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsLoggedIn(false)}
-            >
+          {isLoggedin ? (
+            <Button variant="outline" size="sm" onClick={logout}>
               로그아웃
             </Button>
           ) : (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsLoginModalOpen(true)}
-            >
+            <Button variant="outline" size="sm" onClick={openLoginModal}>
               로그인
             </Button>
           )}

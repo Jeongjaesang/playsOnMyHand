@@ -1,18 +1,14 @@
 import "@/styles/tailwind.css";
 import Header from "./Header";
-import { toast } from "sonner";
+import { Toaster } from "sonner";
+import { LoginModal } from "./LoginModal";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen font-sans bg-white">
-      {/* <button
-        onClick={() =>
-          toast("안녕하세요!", { description: "Sonner 기반 Toast입니다." })
-        }
-      >
-        Toast 띄우기
-      </button>{" "} */}
+      <LoginModal />
       <Header />
+      <Toaster />
       <main className="container p-4 mx-auto">{children}</main>
     </div>
   );

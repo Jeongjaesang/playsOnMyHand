@@ -1,21 +1,19 @@
 import { Link } from "react-router-dom";
 import { Heart } from "lucide-react";
 import { Button } from "@/components/shadcn/button";
+import { Performance } from "@/types/performance";
 
-interface Performance {
-  id: number;
-  title: string;
-  venue: string;
-  date: string;
-  category: string;
-  liked: boolean;
-}
+type PerformanceCard = Pick<
+  Performance,
+  "id" | "title" | "venue" | "date" | "category" | "liked"
+>;
 
 interface PerformanceCardProps {
-  performance: Performance;
+  performance: PerformanceCard;
+  onLike: (performanceId: string) => void; // ✅ Accept onLike as a prop
 }
 
-export function PerformanceCard({ performance }: PerformanceCardProps) {
+export function PerformanceCard({ performance, onLike }: PerformanceCardProps) {
   return (
     <Link
       to={`/performance/${performance.id}`}
@@ -36,6 +34,12 @@ export function PerformanceCard({ performance }: PerformanceCardProps) {
             variant="ghost"
             size="icon"
             className="text-gray-600 hover:text-blue-600"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              onLike(performance.id);
+              // 찜하기 API 호출
+            }}
           >
             <Heart className="w-5 h-5" />
           </Button>
