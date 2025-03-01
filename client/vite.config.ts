@@ -13,6 +13,15 @@ const vitestConfig = {
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  server: {
+    proxy: {
+      "/api": {
+        target: "https://your-api.com",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
   base: "./", // Netlify에서 상대 경로 사용
   ...vitestConfig,
   resolve: {

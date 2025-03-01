@@ -3,9 +3,13 @@ import { logout, fetchNewAccessToken } from "@/services/authService";
 import { useAuthStore } from "@/store/auth";
 
 export const api = axios.create({
-  baseURL: "https://your-api.com",
+  baseURL: "/api",
   withCredentials: true, // ✅ Send cookies (for refreshToken)
 });
+// export const api = axios.create({
+//   baseURL: "https://your-api.com",
+//   withCredentials: true, // ✅ Send cookies (for refreshToken)
+// });
 
 // ✅ Request Interceptor: Attach `accessToken` to every request
 api.interceptors.request.use(

@@ -25,33 +25,41 @@ export default function Home() {
 
   const { handleLike } = useLikePerformance();
 
-  // const observer = useRef<IntersectionObserver | null>(null);
-  // const lastElementRef = useRef<HTMLDivElement | null>(null);
+  const observer = useRef<IntersectionObserver | null>(null);
+  const lastElementRef = useRef<HTMLDivElement | null>(null);
 
   // // 🎯 무한 스크롤 + 필터링 포함된 공연 정보 가져오기
-  // const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-  //   useInfiniteQuery({
-  //     queryKey: ["performances", searchTerm],
-  //     queryFn: ({ pageParam = 1 }) =>
-  //       fetchPerformances({ page: pageParam, searchTerm }),
-  //     getNextPageParam: (lastPage) => lastPage.nextPage ?? false,
-  //     initialPageParam: 1,
-  //   });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    // data: queryFn으로 가져온 공연 데이터
+    // fetchNextPage: 다음 페이지의 데이터를 가져오는 함수
+    // isFetchingNextPage: 다음 페이지를 가져오는 중인지 여부
+    useInfiniteQuery({
+      queryKey: ["performances", searchTerm, location],
+      queryFn: ({ pageParam = 1 }) =>
+        // ??:pageParam는 어텋게 전달되는가
+        fetchPerformances({ page: pageParam, searchTerm }),
+      // page를 받아서 공연 데이터를 받아온다.
+      getNextPageParam: (lastPage) => lastPage.nextPage ?? false,
+      // 다음 페이지를 가져올 수 있는지 여부
+      // ??: 언제 호출되는가
+      initialPageParam: 1,
+    });
 
   // // 🎯 Intersection Observer로 무한 스크롤 감지
-  // useEffect(() => {
-  //   if (!lastElementRef.current || !hasNextPage) return;
-  //   observer.current = new IntersectionObserver(
-  //     (entries) => {
-  //       if (entries[0].isIntersecting) {
-  //         fetchNextPage();
-  //       }
-  //     },
-  //     { threshold: 1 }
-  //   );
-  //   observer.current.observe(lastElementRef.current);
-  //   return () => observer.current?.disconnect();
-  // }, [hasNextPage]);
+  useEffect(() => {
+    if (!lastElementRef.current || !hasNextPage) return;
+    // 다음 페이지가 없으면 실행하지 않음
+    observer.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchNextPage();
+        } // 마지막 요소가 화면에 보이면 다음 페이지를 가져옴
+      },
+      { threshold: 1 }
+    );
+    observer.current.observe(lastElementRef.current);
+    return () => observer.current?.disconnect();
+  }, [hasNextPage, fetchNextPage]);
 
   // 🎯 Near Me 클릭 시 위치 정보 가져오기
   const handleGetLocation = () => {
@@ -104,7 +112,7 @@ export default function Home() {
 
       {/* 공연 리스트 */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {/* {data?.pages.flatMap((page) =>
+        {data?.pages.flatMap((page) =>
           page.performances.map((performance: Performance) => (
             <PerformanceCard
               key={performance.id}
@@ -112,17 +120,17 @@ export default function Home() {
               onLike={handleLike}
             />
           ))
-        )} */}
+        )}
       </div>
 
       {/* 무한 스크롤 감지 */}
-      {/* <div ref={lastElementRef} className="h-1"></div>
+      <div ref={lastElementRef} className="h-1"></div>
 
       {isFetchingNextPage && (
         <p className="text-center text-gray-500">
           Loading more performances...
         </p>
-      )} */}
+      )}
     </div>
   );
 }
