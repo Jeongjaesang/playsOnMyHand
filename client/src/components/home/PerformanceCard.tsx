@@ -5,7 +5,7 @@ import { Performance } from "@/types/performance";
 
 type PerformanceCard = Pick<
   Performance,
-  "id" | "title" | "venue" | "date" | "category" | "liked"
+  "id" | "title" | "venue" | "date" | "categories" | "liked"
 >;
 
 interface PerformanceCardProps {
@@ -28,7 +28,7 @@ export function PerformanceCard({ performance, onLike }: PerformanceCardProps) {
         <p className="mb-2 text-gray-500">{performance.date}</p>
         <div className="flex items-center justify-between">
           <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">
-            {performance.category}
+            {performance.categories}
           </span>
           <Button
             variant="ghost"

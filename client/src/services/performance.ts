@@ -9,11 +9,16 @@ export async function fetchPerformances({
   filters?: Record<string, any>;
   searchTerm?: string;
 }) {
+  console.log(`searchTerm=${searchTerm}`);
+  console.log(`page=${page}`);
   const baseUrl = "/performances"; // Adjust based on your API
 
-  return filters || searchTerm
-    ? api.post(baseUrl, { page, filters, searchTerm }).then((res) => res.data)
-    : api.get(baseUrl, { params: { page } }).then((res) => res.data);
+  // return filters || searchTerm
+  // ?
+  return api
+    .post(baseUrl, { page, filters, searchTerm })
+    .then((res) => res.data);
+  // : api.get(baseUrl, { params: { page } }).then((res) => res.data);
 }
 
 /**

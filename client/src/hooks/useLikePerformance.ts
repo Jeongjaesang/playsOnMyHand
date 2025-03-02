@@ -9,7 +9,7 @@ export function useLikePerformance() {
   const { accessToken: isLoggedin } = useAuthStore();
   const { openLoginModal } = useModalStore();
 
-  console.log("useLikePerformance called");
+  // console.log("useLikePerformance called");
 
   // 🎯 Define like mutation
   const likeMutation = useMutation({

@@ -2,7 +2,7 @@ export interface Performance {
   id: string;
   title: string;
   date: string;
-  category: string;
+  categories: string;
   venue: string;
   time: string;
   price: string;

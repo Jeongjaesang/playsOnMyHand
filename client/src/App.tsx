@@ -8,6 +8,7 @@ import MyPage from "./pages/Mypage";
 import Notifications from "./pages/Notifications";
 import ProtectedRoute from "@/components/common/ProtectedRoute";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Example from "./components/common/Example";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ export default function App() {
       <Router>
         <Layout>
           <Routes>
+            <Route path="/example" element={<Example />} />
             <Route path="/" element={<Home />} />
             <Route path="/performance/:id" element={<PerformanceDetail />} />
 
