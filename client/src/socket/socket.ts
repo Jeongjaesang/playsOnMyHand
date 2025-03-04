@@ -1,5 +1,5 @@
+// import { useNotificationStore } from "@/store/notifications";
 import { io, Socket } from "socket.io-client";
-import { useAuthStore } from "../store/auth";
 
 interface CustomSocket extends Socket {
   auth: {
@@ -9,11 +9,14 @@ interface CustomSocket extends Socket {
 
 let socket: CustomSocket | null = null;
 
-// ✅ WebSocket 연결
-export const connectSocket = () => {
-  const { accessToken } = useAuthStore.getState();
-  // 전역에서 acccessToken을 가져옴
+// ✅ 기존 WebSocket을 반환하는 함수
+export const getExistingSocket = () => {
+  return socket;
+};
 
+// ✅ WebSocket 연결  -- 로그인시 ,zustand에서 connectSocket, 로그아웃시 disconnectSocket,
+// 새로고침이나 accessToken 만료시 updateSocketToken
+export const connectSocket = (accessToken: string) => {
   if (!accessToken) return;
   // accessToken이 없으면 연결하지 않음 => 로그인 상태에서만 연결
 
@@ -26,6 +29,13 @@ export const connectSocket = () => {
 
   socket.on("disconnect", () => console.log("❌ WebSocket 연결 해제됨"));
   // socket이 연결이 해제되었을 때,
+
+  // ✅ WebSocket에서 알림 이벤트 수신
+  // socket.on("notification", (notification) => {
+  //   console.log("🔔 새로운 알림 수신:", notification);
+  //   // 서버로부터 수신할 때 마다 상태값에 추가하도록 함
+  //   // useNotificationStore.getState().addNotification(notification);
+  // });
 };
 
 // ✅ WebSocket 연결 해제
@@ -37,6 +47,7 @@ export const disconnectSocket = () => {
 };
 
 // ✅ accessToken이 변경되면 WebSocket 업데이트
+// accessToken 이 변경될 때? : accessToken이 만료되서 다시 가져오거나, 새로고침 할 때.
 export const updateSocketToken = (newAccessToken: string) => {
   if (socket) {
     socket.auth.token = newAccessToken; // ✅ 갱신된 accessToken 반영

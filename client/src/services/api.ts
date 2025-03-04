@@ -1,5 +1,9 @@
 import axios from "axios";
-import { logout, fetchNewAccessToken } from "@/services/authService";
+import {
+  logout,
+  fetchNewAccessToken,
+  connectTokenToSocket,
+} from "@/services/authService";
 import { useAuthStore } from "@/store/auth";
 
 export const api = axios.create({
@@ -30,14 +34,15 @@ api.interceptors.response.use(
     const originalRequest = error.config;
 
     // 🔄 If accessToken expired (401 Unauthorized), attempt refresh
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      // token이 만료되었을 때
-      originalRequest._retry = true; // Prevent infinite loop
+    if (error.response?.status === 401 && !originalRequest._retried) {
+      // 인증 관련 에러 -> token이 만료되었을 때, 아직 재전송을 하직 않았다면
+      originalRequest._retried = true; // Prevent infinite loop, 실패하고 요청을 한 번 더 시도했음을 알림
       try {
         console.warn("🔄 Token expired, refreshing...");
         const newAccessToken = await fetchNewAccessToken();
         // 새로운 accessToken을 받아옴
         if (newAccessToken) {
+          connectTokenToSocket(newAccessToken); // ✅ 상태와 WebSocket 갱신을 별도 처리
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return api(originalRequest); // ✅ Retry original request with new token
         }

@@ -1,5 +1,5 @@
-import { create } from "zustand";
 import { connectSocket, disconnectSocket } from "@/socket/socket";
+import { create } from "zustand";
 
 interface AuthState {
   accessToken: string | null;
@@ -8,12 +8,11 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>((set) => ({
   accessToken: null,
-  // accessToken: "token value",
 
   setAccessToken: (token) => {
     set({ accessToken: token });
     if (token) {
-      connectSocket();
+      connectSocket(token);
     } else {
       disconnectSocket();
     }

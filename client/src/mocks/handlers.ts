@@ -1,4 +1,4 @@
-import { http, HttpResponse } from "msw";
+import { http, HttpResponse, ws } from "msw";
 import { faker } from "@faker-js/faker";
 import { Performance } from "../types/performance";
 import { Filters } from "@/components/home/Filter";
@@ -23,6 +23,7 @@ const generatePerformance = (id: number): Performance => ({
   image: faker.image.url(),
   mapUrl: faker.internet.url(),
   liked: faker.datatype.boolean(),
+  comments: [],
 });
 
 // Generate mock performances
@@ -30,26 +31,21 @@ const performances = Array.from({ length: 50 }, (_, i) =>
   generatePerformance(i + 1)
 );
 
+// 🎭 Mock 댓글 데이터 저장소
+const mockComments: Record<
+  string,
+  Array<{ id: number; text: string; likes: number; replies: any[] }>
+> = {};
+
+const notificationWs = ws.link("wss://chat.example.com");
+
 export const handlers = [
-  // 🎭 Mock fetching paginated performances (GET)
-  // http.get("/api/performances", async ({ request }) => {
-  //   console.log("msw called");
-  //   console.log(request);
-
-  //   const url = new URL(request.url);
-  //   const page = Number(url.searchParams.get("page")) || 1;
-  //   const perPage = 10;
-  //   const startIndex = (page - 1) * perPage;
-  //   const paginatedData = performances.slice(startIndex, startIndex + perPage);
-
-  //   return HttpResponse.json({
-  //     total: performances.length,
-  //     page,
-  //     perPage,
-  //     performances: paginatedData,
-  //     nextPage: performances.length > startIndex + perPage ? page + 1 : null,
-  //   });
-  // }),
+  notificationWs.addEventListener("connection", ({ client }) => {
+    client.addEventListener("message", (event) => {
+      // 클라이언트에서 서버로 요청할때 event로 데이터를 확인 가능
+      console.log("client sent:", event.data);
+    });
+  }),
 
   // 🎯 Mock searching performances (POST)
   http.post("/api/performances", async ({ request }) => {
@@ -103,4 +99,30 @@ export const handlers = [
       nextPage: filteredData.length > startIndex + perPage ? page + 1 : null,
     });
   }),
+
+  // 📝 Mock: 새로운 댓글 추가 (POST)
+  http.post(
+    "/api/performances/:performanceId/comments",
+    async ({ params, request }) => {
+      console.log(`Adding comment for performanceId: ${params.performanceId}`);
+
+      const { text } = (await request.json()) as { text: string };
+      const performanceId = params.performanceId as string;
+
+      if (!mockComments[performanceId]) {
+        mockComments[performanceId] = [];
+      }
+
+      const newComment = {
+        id: Date.now(),
+        text,
+        likes: 0,
+        replies: [],
+      };
+
+      mockComments[performanceId].push(newComment);
+
+      return HttpResponse.json(newComment, { status: 201 });
+    }
+  ),
 ];

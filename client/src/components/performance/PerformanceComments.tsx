@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CommentForm } from "./CommentForm";
 import { CommentList } from "./CommentList";
+import { Comment } from "@/types/performance";
 
 interface PerformanceCommentsProps {
   comments: Comment[];
@@ -11,6 +12,9 @@ export function PerformanceComments({
   comments,
   onSubmit,
 }: PerformanceCommentsProps) {
+  console.log("comments in PerformanceComments");
+  console.log(comments);
+
   const [comment, setComment] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {

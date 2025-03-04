@@ -12,7 +12,6 @@ import { SettingsSwitch } from "../common/SettingsSwitch";
 import { SettingsSelect } from "../common/SettingsSelect";
 
 export function NotificationSettingsForm() {
-  const [showWelcome, setShowWelcome] = useState(true);
   const [bookingReminder, setBookingReminder] = useState("3");
   const [performanceDateReminder, setPerformanceDateReminder] = useState("3");
   const [showCancellationChanges, setShowCancellationChanges] = useState(true);
@@ -22,13 +21,6 @@ export function NotificationSettingsForm() {
 
   return (
     <div className="space-y-6">
-      <SettingsSwitch
-        id="welcome-notification"
-        label="환영 알림 표시"
-        description="앱에 처음 로그인할 때 환영 메시지를 표시합니다."
-        checked={showWelcome}
-        onCheckedChange={setShowWelcome}
-      />
       <SettingsSelect
         id="booking-reminder"
         label="예매 임박 알림"
