@@ -22,6 +22,9 @@ api.interceptors.request.use(
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
+    if (!config.headers["Content-Type"]) {
+      config.headers["Content-Type"] = "application/json"; // ✅ 명확하게 지정
+    }
     return config;
   },
   (error) => Promise.reject(error)

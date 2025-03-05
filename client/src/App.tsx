@@ -7,6 +7,7 @@ import MyPage from "./pages/Mypage";
 import Notifications from "./pages/Notifications";
 import ProtectedRoute from "@/components/common/ProtectedRoute";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Example from "./components/common/Example";
 import {
   connectTokenToSocket,
@@ -41,6 +42,7 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
       <Router>
         <Layout>
           <Routes>

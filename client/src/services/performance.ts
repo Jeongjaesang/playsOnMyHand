@@ -1,4 +1,5 @@
 import api from "@/services/api"; // Use the centralized Axios instance
+import { Performance } from "@/types/performance";
 
 export async function fetchPerformances({
   page = 1,
@@ -47,47 +48,56 @@ const performanceDetailDummyData = {
   categories: "theater",
   comments: [
     {
-      id: 1,
+      id: "1",
       text: "이 공연 정말 기대돼요!",
       likes: 10,
+      liked: false,
+
       replies: [
         {
-          id: 101,
+          id: "101",
           text: "저도 너무 기대됩니다!",
           likes: 3,
+          liked: false,
         },
         {
-          id: 102,
+          id: "102",
           text: "이번 연출이 특히 기대된다고 하더라고요.",
           likes: 5,
+          liked: false,
         },
       ],
     },
     {
-      id: 2,
+      id: "2",
       text: "햄릿 공연은 항상 명작이죠.",
       likes: 8,
+      liked: false,
+
       replies: [
         {
-          id: 201,
+          id: "201",
           text: "맞아요, 이번 캐스팅도 훌륭하다고 들었습니다.",
           likes: 4,
+          liked: false,
         },
       ],
     },
     {
-      id: 3,
+      id: "3",
       text: "세종문화회관에서 하는 햄릿이라니 기대됩니다!",
       likes: 6,
       replies: [],
+      liked: false,
     },
   ],
 };
 
-export const fetchPerformanceDetails = async (id: string) => {
-  // const { data } = await api.get(`/performances/${id}`);
-  // return data;
-  return performanceDetailDummyData;
+export const fetchPerformanceDetails = async (
+  id: string
+): Promise<Performance> => {
+  const { data } = await api.get(`/performances/${id}`);
+  return data;
 };
 
 export const postComment = async ({
@@ -101,4 +111,38 @@ export const postComment = async ({
     text,
   });
   return data;
+};
+
+interface AddReplyParams {
+  performanceId: string;
+  commentId: string;
+  content: string;
+}
+
+// 대댓글 추가 요청 함수
+export const addReply = async ({
+  commentId,
+  content,
+  performanceId,
+}: AddReplyParams) => {
+  console.log("add Reply 호출!");
+  const response = await api.post(`/performances/${performanceId}/replies`, {
+    commentId,
+    content,
+  });
+  return response.data;
+};
+
+export const toggleLikeComment = async ({
+  commentId,
+}: {
+  commentId: string;
+}) => {
+  const response = await api.patch(`/comments/${commentId}/like`);
+  return response.data; // 새로운 좋아요 개수를 반환한다고 가정
+};
+
+export const toggleLikeReply = async ({ replyId }: { replyId: string }) => {
+  const response = await api.patch(`/likes/replies/${replyId}`);
+  return response.data; // 새로운 좋아요 개수를 반환한다고 가정
 };
